@@ -5,7 +5,7 @@
         <title></title>
         <script type="text/javascript">
 
-            var iChr = 0; // secret letter keycode
+            var iSecret = 0; // secret letter keycode
             var iWon = 0;
             var iLost = 0;
             var iGuess = 0;
@@ -13,10 +13,10 @@
 
             function genSecret() {
                 var rnd = Math.floor(Math.random() * 26) + 97;
-                while (iChr === rnd) {
+                while (iSecret === rnd) {
                     rnd = Math.floor(Math.random() * 26) + 97;
                 }
-                iChr = rnd;
+                iSecret = rnd;
                 iGuess = 0;
                 aGuesses = [];
                 document.getElementById("Won").textContent = iWon;
@@ -26,7 +26,7 @@
             }
 
             function keyPress(event) {
-                if (!(iChr === 0) && iGuess < 10) {
+                if (!(iSecret === 0) && iGuess < 10) {
                     var iKey = event.which || event.keyCode;
                     if (iKey >= 65 && iKey <= 90 || iKey >= 97 && iKey <= 122) {
                         var cKey = String.fromCharCode(iKey).toLowerCase();
@@ -51,14 +51,14 @@
                                 sGuesses += " Already Used!";
                             }
                         }
-                        if (cKey === String.fromCharCode(iChr)) {
-                            alert("The secret letter was " + String.fromCharCode(iChr) + ". You win!");
+                        if (cKey === String.fromCharCode(iSecret)) {
+                            alert("The secret letter was " + String.fromCharCode(iSecret) + ". You win!");
                             iWon += 1;
-                            iChr = 0;
+                            iSecret = 0;
                         } else if (iGuess === 10) {
-                            alert("The secret letter was " + String.fromCharCode(iChr) + ". You lost.");
+                            alert("The secret letter was " + String.fromCharCode(iSecret) + ". You lost.");
                             iLost += 1;
-                            iChr = 0;
+                            iSecret = 0;
                         }
                         document.getElementById("Guesses").textContent = sGuesses;
                         document.getElementById("Won").textContent = iWon;
