@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script type="text/javascript">
+
+            var iChr = 0; // secret letter keycode
+            var iWon = 0;
+            var iLost = 0;
+            var iGuess = 0;
+            var aGuesses = [];
+
+            function genSecret() {
+                var rnd = Math.floor(Math.random() * 26) + 97;
+                while (iChr === rnd) {
+                    rnd = Math.floor(Math.random() * 26) + 97;
+                }
+                iChr = rnd;
+                iGuess = 0;
+                aGuesses = [];
+                document.getElementById("Won").textContent = iWon;
+                document.getElementById("Lost").textContent = iLost;
+                document.getElementById("Guess").textContent = 10 - iGuess;
+                document.getElementById("Guesses").textContent = "none";
+            }
+
+            function keyPress(event) {
+                if (!(iChr === 0) && iGuess < 10) {
+                    var iKey = event.which || event.keyCode;
+                    if (iKey >= 65 && iKey <= 90 || iKey >= 97 && iKey <= 122) {
+                        var cKey = String.fromCharCode(iKey).toLowerCase();
+                        var bUsed = false;
+                        var sGuesses = "";
+                        if (aGuesses.length == 0) {
+                            iGuess += 1;
+                            aGuesses[0] = cKey;
+                            sGuesses = cKey;
+                        } else {
+                            for (i = 0; i < aGuesses.length; i++) {
+                                sGuesses += " " + aGuesses[i];
+                                if (aGuesses[i] === cKey) {
+                                    bUsed = true;
+                                }
+                            }
+                            if (!bUsed) {
+                                iGuess += 1;
+                                aGuesses.push(cKey)
+                                sGuesses += " " + cKey;
+                            } else {
+                                sGuesses += " Already Used!";
+                            }
+                        }
+                        if (cKey === String.fromCharCode(iChr)) {
+                            alert("The secret letter was " + String.fromCharCode(iChr) + ". You win!");
+                            iWon += 1;
+                            iChr = 0;
+                        } else if (iGuess === 10) {
+                            alert("The secret letter was " + String.fromCharCode(iChr) + ". You lost.");
+                            iLost += 1;
+                            iChr = 0;
+                        }
+                        document.getElementById("Guesses").textContent = sGuesses;
+                        document.getElementById("Won").textContent = iWon;
+                        document.getElementById("Lost").textContent = iLost;
+                        document.getElementById("Guess").textContent = 10 - iGuess;
+                    }
+                }
+            }
+
+        </script>
+    </head>
+    <body onload="genSecret()" onkeypress="keyPress(event)">
+        <h1>The Psychic Game</h1>
+        <p>
+            Guess which letter I'm thinking of!
+        </p>
+        <p>
+            Wins: <span id="Won"></span><br>
+            Losses: <span id="Lost"></span><br>
+            Guesses Left: <span id="Guess"></span><br>
+            Your Guesses so far: <span id="Guesses"></span><br>
+        </p>
+        <p>
+            <button type="button" onclick="genSecret()">Gen Letter</button>
+        </p>
+    </body>
+</html>
